@@ -1,0 +1,52 @@
+<!-- 防抖提示组件 -->
+<template>
+  <view class="weui-toptips weui-toptips_warn" wx:if = "{{display}}">{{message}}</view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import myloadsh from '../../tools/loadsh.js'
+  export default class Tips extends wepy.component {
+    
+    props = {};
+
+    data = {
+        display: false,
+        message: '222'
+    };
+
+    components = {};
+
+    methods = {
+        //在mixins的input中invoke
+        show(message) {
+            this.display = true;
+            this.message = message;
+            this.disapper();
+        }
+    };
+
+    disapper = myloadsh.debounce(()=>{
+        this.display = false;
+        this.$apply();
+    }, 1500, this)
+
+    events = {
+        
+    };
+
+    watch = {};
+
+    computed = {};
+
+    onLoad() { };
+
+    onShow() { };
+
+
+  }
+</script>
+
+<style lang='less'>
+  @import "../../styles/variable";
+</style>

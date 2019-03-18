@@ -1,0 +1,139 @@
+<template>
+    <view>
+        <Tips />
+        <view class="brand column-center">
+            <image class="logo" src="/images/home/shop-logo.png"/>
+            <text class="text">茶色商家助手</text>
+        </view>
+        <view>
+            <van-field
+                value="{{ form_phone.value }}"
+                required
+                label="手机号"
+                placeholder="请输入手机号"
+                error-message="{{ form_phone.errorMessage }}"
+                @change="inputphone"
+            />
+            <van-field
+                value="{{ form_sms.value }}"
+                center
+                required
+                clearable
+                maxlength="4"
+                label="验证码"
+                error-message="{{ form_sms.errorMessage }}"
+                placeholder="请输入短信验证码"
+                use-button-slot
+                @change="inputsms"
+            >
+                <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+            </van-field>
+            <view class="mt20 pall">
+                <van-button bind:getuserinfo="mygetuserinfo" size="large" type="info">登录</van-button>
+            </view>
+        </view>      
+        <text>{{validate}}</text>  
+        <open-data type="userAvatarUrl"></open-data>
+<open-data type="userNickName"></open-data>
+    </view>
+    
+</template>
+<script>
+import wepy from 'wepy';
+import FormTips from '../../components/weui/tips';
+import input from '../../mixins/input';
+import validate from '../../tools/validate.js';
+
+export default class Login extends wepy.page {
+    data = {
+        init: false,
+        loginMessage: {},
+        form_phone:{
+            value: '',
+            errorMessage:''
+        },
+        form_sms:{
+            value:'',
+            errorMessage:''
+        }
+    }
+    computed = {
+        validate() {
+            return !(this.form_phone.errorMessage||this.form_sms.errorMessage)
+        }
+    }
+    config = {
+        "usingComponents": {
+            'van-button': '/components/vant/button/index',
+            "van-field": "/components/vant/field/index"
+        }
+    }
+
+    onLoad (){
+        //this.tips('出错啦')
+        wepy.authorize({
+        scope: 'scope.record',
+        success() {
+          // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+          wepy.startRecord()
+        }
+      })
+    }
+    
+    methods = {
+        shows() {
+            this.tips('error');
+        },
+        inputphone(value){
+            this.form_phone.value = value.detail;
+            let pass = validate.phone(value.detail);
+            if(!pass){
+                this.form_phone.errorMessage = '请输入格式正确的手机号码';
+            }else{
+                this.form_phone.errorMessage = '';
+            }
+            console.log(value.detail)
+        },
+        inputsms(value){
+            this.form_sms.value = value.detail
+            console.log(value.detail)
+        },
+        mygetuserinfo(e) {
+            console.log(e)
+        }
+        
+    }
+    
+    components = {
+        Tips: FormTips,
+    }
+
+    mixins = [input]
+}
+</script>
+<style lang="less">
+    @import "../../styles/variable";
+    @import "../../styles/base";
+
+    .brand{
+        padding-top: 60rpx;
+        padding-bottom: 60rpx;
+        text-align: center;
+
+        .logo{
+        width: 100px;
+        height: 100px;
+        }
+
+        text{
+        margin-top: 15rpx;
+        font-size: @text-form;
+
+        }
+    }
+    button{
+        background-color: @color-primary !important;
+        border: 1px solid @color-primary !important;
+    }
+</style>
+

@@ -1,0 +1,11 @@
+<script>
+import wepy from 'wepy';
+export default class input extends wepy.mixin{
+    
+    // 提示错误（调用FormTips）
+    tips(message) {
+        //如果tips在夫组件中则直接写组件名，否则写路径
+        this.$invoke('Tips', 'show', message)
+    }
+}
+</script>
