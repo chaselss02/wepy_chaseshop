@@ -8,7 +8,7 @@
   },
   "compileType": "miniprogram",
   "appid": "wxbf1bcf3603600438",
-  "projectname": "myproject",
+  "projectname": "wepy_chaseshop",
   "miniprogramRoot": "./dist"
  
 }

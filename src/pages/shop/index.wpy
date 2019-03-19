@@ -1,9 +1,100 @@
 <template>
-    <view>shop</view>
+    <view>
+    <van-cell-group>
+        <repeat for="{{list}}" key="{{item.title}}">
+            <van-cell
+                wx:if="{{item.context}}"
+                value=""
+                is-link
+                clickable
+                bind:click="login"
+                >
+                <view slot="title" class="row-fs-c">
+                    <view class="avatar">
+                        <open-data type="userAvatarUrl" >
+                        </open-data>
+                    </view>
+                    <text class="ml20">{{item.value}}</text>
+                </view>
+            </van-cell>
+            <van-cell
+                wx:else
+                title="{{item.title}}"
+                value=""
+                is-link
+                arrow-direction=""
+                />
+        </repeat>
+    </van-cell-group>
+    <button bindgetuserinfo="getuserinfo" open-type="getUserInfo">授权</button>
+    </view>
 </template>
+
 <script>
 import wepy from 'wepy'
+import User from '../../model/user.js'
 export default class Shop extends wepy.page {
-    
+    data={
+        list:[
+            {
+            title:"单元格1",
+            value:"注册/登录",
+            context: true
+        },{
+            title:"单元格1",
+            value:"内容"
+        },{
+            title:"单元格2",
+            value:"内容"
+        }]
+    }
+    config={
+        "usingComponents": {
+            "van-cell": "/components/vant/cell/index",
+            "van-cell-group": "/components/vant/cell-group/index"
+        }
+    }
+    methods={
+        async login(e) {
+           let res = await wepy.login();
+           let data = await wepy.request({
+                url: 'https://api.weixin.qq.com/sns/jscode2session', 
+                data: {
+                    appid: 'wxbf1bcf3603600438',
+                    secret: 'ff55a126e3dfba5b28dc86b830993077',
+                    js_code: res.code,
+                    grant_type: 'authorization_code'
+                }
+           })
+           let {openid} = data;
+        const testDB = wx.cloud.database()
+        testDB.collection('USER').add({
+            data: new User({openid})
+        })
+        console.log()
+        },
+        getuserinfo(res) {
+                    console.log(res, '授权成功')
+        }
+    }
+    onLoad() {
+           wx.cloud.init({
+               env: 'chaselss-b04061'
+           })
+    }
 }
 </script>
+<style lang="less">
+@import '../../styles/base.less';
+    .avatar{
+        .icon-round(50px);
+        overflow: hidden;
+    }
+    .shop_avatar_box{
+        .van-cell__right-icon{
+            height: 100% !important;
+            line-height: 47px !important;
+        }
+    }
+    
+</style>

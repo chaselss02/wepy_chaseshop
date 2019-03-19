@@ -21,10 +21,10 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/home/index',
+      /* 'pages/home/index', */
+      'pages/shop/index',
       'pages/home/home',
       'pages/order/index',
-      'pages/shop/index'
     ],
     window: {
       backgroundTextStyle: 'light',//下拉 loading 的样式，仅支持 dark / light
@@ -42,6 +42,12 @@ export default class extends wepy.app {
         backgroundColor: '#FAFAFA',
         list: [
           {
+            iconPath: 'images/tab/user.png',
+            selectedIconPath: 'images/tab/user-active.png',
+            pagePath: 'pages/shop/index',
+            text: '店铺'
+          },
+          {
             iconPath: 'images/tab/manage.png',
             selectedIconPath: 'images/tab/manage-active.png',
             pagePath: 'pages/home/home',
@@ -53,12 +59,6 @@ export default class extends wepy.app {
             pagePath: 'pages/order/index',
             text: '订单'
           },
-          {
-            iconPath: 'images/tab/user.png',
-            selectedIconPath: 'images/tab/user-active.png',
-            pagePath: 'pages/shop/index',
-            text: '店铺'
-          }
         ]
       }
   }
@@ -82,15 +82,17 @@ export default class extends wepy.app {
     this.intercept('request', {
       config(p) {
         //请求数据上构造公共的字段
-        return this.creatAuthHeader(p);
+        //return this.creatAuthHeader(p);
+        return p;
       },
       success(p) {
         //请求成功做数据拦截
-        if(p.code == 200){
+        /* if(p.code == 200){
           return p.data;
         }else{
           return p.message;
-        }
+        } */
+        return p.data;
       }
     })
     // 上传文件拦截器
