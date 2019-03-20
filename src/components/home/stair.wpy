@@ -1,0 +1,32 @@
+<!-- 楼梯组件 -->
+<template>
+    <view class="Stair">wo shi louti</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+export default class Stair extends wepy.component {
+  props = {};
+
+  data = {};
+
+  components = {};
+
+  methods = {};
+
+  events = {};
+
+  watch = {};
+
+  computed = {};
+
+  onLoad() {
+    console.log(this);
+  }
+
+  onShow() {}
+}
+</script>
+
+<style lang='less'>
+</style>

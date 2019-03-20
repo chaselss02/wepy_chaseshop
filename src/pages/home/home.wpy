@@ -1,10 +1,78 @@
 <template>
-    <view>home</view>
+  <view>
+    <Stair data-source="{{}}"></Stair>
+    <StairLeft data-source="{{items}}"></StairLeft>
+    <StairRight data-source="{{items}}"></StairRight>
+  </view>
 </template>
 <script>
 import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+import { GETPEODUCTLIST } from '../../store/types/home';
+import { asyncProList } from '../../store/actions/home.js';
+
+import Stair from '../../components/home/stair';
+import StairLeft from '../../components/home/stairLeft';
+import StairRight from '../../components/home/stairRight';
+@connect(
+  {
+    asyncProductList(state) {
+      return state.home.productList;
+    }
+  },
+  {
+    asyncProList
+  }
+)
 export default class Home extends wepy.page {
-    
+  data = {
+    items: [
+      {
+        id: '342',
+        // 导航名称
+        text: '所有城市',
+        // 禁用选项
+        disabled: false
+      },
+      {
+        id: '34我2',
+        // 导航名称
+        text: '家'
+      }
+    ]
+  };
+  config = {
+    usingComponents: {
+      'van-tree-select': '/components/vant/tree-select/index'
+    }
+  };
+  methods = {
+    onClickNav({ detail = {} }) {
+      console.log(detail);
+      this.setData({
+        mainActiveIndex: detail.index || 0
+      });
+    },
+
+    onClickItem({ detail = {} }) {
+      console.log(detail);
+
+      this.setData({
+        activeId: detail.id
+      });
+    }
+  };
+
+  components = {
+    Stair,
+    StairLeft,
+    StairRight
+  };
+
+  onShow() {
+    console.log(this.asyncProList, this.asyncProductList);
+    this.methods.asyncProList();
+  }
 }
 </script>
 
