@@ -1,9 +1,137 @@
 <template>
-    <view>order</view>
+    <scroll-view class="order_containor" scroll-y>
+        <repeat for="{{orderList}}" key="index1" index="index1" item="item1">
+            <view class="order_Datebox">
+                <text class="timeLabel">{{item1.date}}</text>
+                <repeat for="{{item1.order}}" key="index2" index="index2" item="item2">
+                    <view class="order_item">
+                        <view class="header">
+                            <view class="header_top">
+                                <view class="type_time">
+                                    <text class="type">{{item2.type==0?'店内':'外卖'}}</text>
+                                    <text class="time">{{item2.time}}</text>
+                                </view>
+                                <text>{{item2.desknum}}桌-取单号{{item2.ordernum}}</text>
+                            </view>
+                        </view>
+                        <view class="body">
+                            <view class="body_top">
+                                <text>商品名称</text>
+                                <text>份数</text>
+                                <text>单价</text>
+                            </view>
+                            <repeat for="{{item2.menu}}" key="index3" index="index3" item="item3">
+                                <view class="items">
+                                    <text>{{item3.name}}</text>
+                                    <text>{{item3.count}}</text>
+                                    <text>{{item3.price}}</text>
+                                </view>
+                            </repeat>
+                            <view class="remark">
+                                <text>备注</text>
+                                <text>{{item3.remark}}</text>
+                            </view>
+                            <view class="footer">
+                                <text>共{{item2.length}}份商品</text>
+                                <view class="">
+                                    <text>合计</text>
+                                    <text>{{item2.total}}</text>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </repeat>
+            </view>
+        </repeat>
+    </scroll-view>
 </template>
 <script>
 import wepy from 'wepy';
+
+import { connect } from 'wepy-redux';
+import { asyncGetOrderList } from '../../store/actions/order.js';
+
+@connect(
+  {
+    orderList(state) {
+      return state.order.orderList;
+    }
+  },
+  {
+    asyncGetOrderList
+  }
+)
 export default class Order extends wepy.page {
-    
+  onShow() {
+    this.methods.asyncGetOrderList();
+  }
 }
 </script>
+<style lang="less" scoped>
+.order_containor {
+  height: 100%;
+  background-color: #fafafa;
+  box-sizing: border-box;
+  padding: 30rpx;
+  .order_Datebox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 24rpx;
+    .timeLabel {
+      color: #fff;
+      background-color: #ccc;
+      margin-bottom: 30rpx;
+      width: 125rpx;
+      height: 40rpx;
+      line-height: 40rpx;
+      text-align: center;
+    }
+    .order_item {
+      height: 700rpx;
+      background-color: #fff;
+      margin-bottom: 30rpx;
+      width: 96%;
+      box-sizing: border-box;
+      padding: 30rpx;
+      border-radius: 20rpx;
+      box-shadow: 0 0 5rpx #ccc;
+      .header {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 30rpx;
+        .type_time {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+      }
+      .body {
+        border-top: 1rpx solid #ddd;
+        border-bottom: 1rpx solid #ddd;
+        padding: 30rpx;
+        .body_top {
+          display: flex;
+          color: #ccc;
+          justify-content: space-between;
+          text {
+            text-align: center;
+            flex: 1;
+          }
+        }
+
+        .items {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 80rpx;
+          text {
+            text-align: center;
+            flex: 1;
+          }
+        }
+      }
+    }
+  }
+}
+</style>

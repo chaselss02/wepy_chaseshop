@@ -25,7 +25,7 @@ setStore(store);
 
 export default class extends wepy.app {
   config = {
-    pages: ['pages/home/home', 'pages/shop/index', 'pages/order/index'],
+    pages: ['pages/order/index', 'pages/shop/index', 'pages/home/home'],
     window: {
       backgroundTextStyle: 'light', //下拉 loading 的样式，仅支持 dark / light
       navigationBarBackgroundColor: '#fff',
