@@ -1,4 +1,9 @@
 <style lang="less">
+// 一定要在app.wpy中附加一个page  100%的高度
+page {
+  height: 100%;
+  box-sizing: border-box;
+}
 .container {
   height: 100%;
   display: flex;
@@ -10,74 +15,67 @@
 </style>
 
 <script>
-import wepy from 'wepy'
+import wepy from 'wepy';
 
-import { setStore } from 'wepy-redux'
-import configStore from './store'
-import 'wepy-async-function'
-const store = configStore()
-setStore(store)
+import { setStore } from 'wepy-redux';
+import configStore from './store';
+import 'wepy-async-function';
+const store = configStore();
+setStore(store);
 
 export default class extends wepy.app {
   config = {
-    pages: [
-      /* 'pages/home/index', */
-      'pages/home/home',
-      'pages/shop/index',
-      'pages/order/index',
-    ],
+    pages: ['pages/home/home', 'pages/shop/index', 'pages/order/index'],
     window: {
-      backgroundTextStyle: 'light',//下拉 loading 的样式，仅支持 dark / light
+      backgroundTextStyle: 'light', //下拉 loading 的样式，仅支持 dark / light
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '茶色小铺',
       navigationBarTextStyle: 'white',
       backgroundColor: '#F5F5F5',
       navigationBarBackgroundColor: '#1296db'
     },
-      
+
     tabBar: {
-        color: '#666666',
-        selectedColor: '#1296db',
-        borderStyle: 'white',
-        backgroundColor: '#FAFAFA',
-        list: [
-          {
-            iconPath: 'images/tab/user.png',
-            selectedIconPath: 'images/tab/user-active.png',
-            pagePath: 'pages/shop/index',
-            text: '店铺'
-          },
-          {
-            iconPath: 'images/tab/manage.png',
-            selectedIconPath: 'images/tab/manage-active.png',
-            pagePath: 'pages/home/home',
-            text: '工作台'
-          },
-          {
-            iconPath: 'images/tab/order.png',
-            selectedIconPath: 'images/tab/order-active.png',
-            pagePath: 'pages/order/index',
-            text: '订单'
-          },
-        ]
-      }
-  }
+      color: '#666666',
+      selectedColor: '#1296db',
+      borderStyle: 'white',
+      backgroundColor: '#FAFAFA',
+      list: [
+        {
+          iconPath: 'images/tab/user.png',
+          selectedIconPath: 'images/tab/user-active.png',
+          pagePath: 'pages/shop/index',
+          text: '店铺'
+        },
+        {
+          iconPath: 'images/tab/manage.png',
+          selectedIconPath: 'images/tab/manage-active.png',
+          pagePath: 'pages/home/home',
+          text: '工作台'
+        },
+        {
+          iconPath: 'images/tab/order.png',
+          selectedIconPath: 'images/tab/order-active.png',
+          pagePath: 'pages/order/index',
+          text: '订单'
+        }
+      ]
+    }
+  };
 
   globalData = {
-    userInfo: {
-      
-    },
+    userInfo: {},
     shopInfo: {
       name: '茶色小铺',
       boss: 'chaselss',
       shopID: '00001'
     }
-  }
+  };
 
-  constructor () {
-    super()
-    this.use('requestfix')// 修复请求并发的问题
-    this.use('promisify');// 使用wepy.xxx的方式请求小程序原生API都将Promise化
+  constructor() {
+    super();
+    this.use('requestfix'); // 修复请求并发的问题
+    this.use('promisify'); // 使用wepy.xxx的方式请求小程序原生API都将Promise化
     // 普通的请求拦截
     this.intercept('request', {
       config(p) {
@@ -94,56 +92,56 @@ export default class extends wepy.app {
         } */
         return p.data;
       }
-    })
+    });
     // 上传文件拦截器
     this.intercept('uploadFile', {
       config(p) {
-        return this.creatAuthHeader(p)
+        return this.creatAuthHeader(p);
       },
       success(p) {
-        if(p.code==200){
+        if (p.code == 200) {
           return p.data;
-        }else{
+        } else {
           return p.message;
         }
       }
-    })
+    });
   }
 
   creatAuthHeader(data) {
-    let temp = JSON.parse(JSON.stringify(data))
-    temp.timestap = new Date()
+    let temp = JSON.parse(JSON.stringify(data));
+    temp.timestap = new Date();
     return temp;
   }
   onLaunch() {
-    this.testAsync()
+    this.testAsync();
   }
 
-  sleep (s) {
+  sleep(s) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve('promise resolved')
-      }, s * 1000)
-    })
+        resolve('promise resolved');
+      }, s * 1000);
+    });
   }
 
-  async testAsync () {
-    const data = await this.sleep(3)
-    console.log(data)
+  async testAsync() {
+    const data = await this.sleep(3);
+    console.log(data);
   }
 
   getUserInfo(cb) {
-    const that = this
+    const that = this;
     if (this.globalData.userInfo) {
-      return this.globalData.userInfo
+      return this.globalData.userInfo;
     }
     // 调用前需要 用户授权
     wepy.getUserInfo({
-      success (res) {
-        that.globalData.userInfo = res.userInfo
-        cb && cb(res.userInfo)
+      success(res) {
+        that.globalData.userInfo = res.userInfo;
+        cb && cb(res.userInfo);
       }
-    })
+    });
   }
 }
 </script>

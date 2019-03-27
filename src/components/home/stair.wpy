@@ -1,6 +1,9 @@
 <!-- 楼梯组件 -->
 <template>
-    <view class="Stair">wo shi louti</view>
+  <view class="stair">
+    <slot name="lefts">默认标题1</slot>
+    <slot name="rights">默认标题2</slot>
+  </view>
 </template>
 
 <script>
@@ -20,13 +23,17 @@ export default class Stair extends wepy.component {
 
   computed = {};
 
-  onLoad() {
-    console.log(this);
+  config() {
+    //multipleSlots: true;
   }
-
   onShow() {}
 }
 </script>
 
 <style lang='less'>
+.stair {
+  height: 100%;
+  background-color: #fafafa;
+  display: flex;
+}
 </style>

@@ -1,1 +1,2 @@
-export const GETPEODUCTLIST = Symbol();
+export const ASYNCDATALABEL = Symbol('ASYNCDATALABEL');
+export const ASYNCDATAPRODUCT = Symbol('ASYNCDATAPRODUCT');

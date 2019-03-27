@@ -1,0 +1,34 @@
+<!--  -->
+<template>
+    <view class="container">
+        <button @tap="toast" size="mini">第三方组件</button>
+        <button @tap="communicate" size="mini">组件通信</button>
+        <button @tap="tap" size="mini">混合TAP事件</button>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+export default class Example extends wepy.component {
+  props = {};
+
+  data = {};
+
+  components = {};
+
+  methods = {};
+
+  events = {};
+
+  watch = {};
+
+  computed = {};
+
+  onLoad() {}
+
+  onShow() {}
+}
+</script>
+
+<style lang='less'>
+</style>

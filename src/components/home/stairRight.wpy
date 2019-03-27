@@ -1,12 +1,36 @@
 <!--  -->
 <template>
-    <view class="container">right</view>
+  <view class="myStair_right">
+    <view class="header">
+      <text>{{source.pname+'('+source.list.length+')'}}</text>
+      <view class="button_text">
+        <text>排序</text>
+        <text class="ml10">添加</text>
+      </view>
+      
+    </view>
+    <scroll-view class="content" scroll-y>
+      <repeat for="{{source.list}}" key="index" index="index" item="item">
+        <view class="item">
+          <image class="image" src="{{item.photoURL}}" mode="scaleToFill" lazy-load />
+          <view class="center">
+            <text class="center1">{{item.name}}</text>
+            <text class="center2">库存{{item.stocke}}件</text>
+            <text class="center3">￥{{item.price}}</text>
+          </view>
+          <text class="button_text button_border">编辑</text>
+        </view>
+      </repeat>
+    </scroll-view>
+  </view>
 </template>
 
 <script>
 import wepy from 'wepy';
 export default class Example extends wepy.component {
-  props = {};
+  props = {
+    source: Object
+  };
 
   data = {};
 
@@ -27,4 +51,68 @@ export default class Example extends wepy.component {
 </script>
 
 <style lang='less'>
+.myStair_right {
+  width: 100%;
+  height: 100%;
+  font-size: 28rpx;
+  .button_text {
+    height: 52rpx;
+    color: #1296db;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: 30rpx 16rpx 0;
+    height: 7%;
+    box-sizing: border-box;
+  }
+  .content {
+    padding-left: 36rpx;
+    height: 93%;
+    box-sizing: border-box;
+  }
+  .item {
+    display: flex;
+    font-size: 23rpx;
+    height: 207rpx;
+    padding: 30rpx 16rpx 30rpx 0;
+    border-bottom: 1rpx solid #ddd;
+    box-sizing: border-box;
+    .image {
+      height: 150rpx;
+      width: 150rpx;
+    }
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex: 1;
+      margin-left: 30rpx;
+      .center1 {
+        font-weight: 500;
+        margin-bottom: 20rpx;
+      }
+      .center2 {
+        color: #ccc;
+        margin-bottom: 14rpx;
+      }
+      .center3 {
+        color: red;
+        
+      }
+    }
+    .button_border{
+      align-self: flex-end;
+      border: 1px solid #1296db;
+      border-radius: 3rpx;
+      text-align: center;
+      height: 48rpx;
+      line-height: 48rpx;
+      width: 94rpx;
+    }
+  }
+  .ml10{
+    margin-left: 20rpx;
+  }
+}
 </style>

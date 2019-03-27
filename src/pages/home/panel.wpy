@@ -1,0 +1,33 @@
+<!--  -->
+<template>
+    <view class="panel">
+        <slot name="title">默认标题</slot>
+        <slot name="content">默认内容</slot>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+export default class Example extends wepy.component {
+  props = {};
+
+  data = {};
+
+  components = {};
+
+  methods = {};
+
+  events = {};
+
+  watch = {};
+
+  computed = {};
+
+  onLoad() {}
+
+  onShow() {}
+}
+</script>
+
+<style lang='less'>
+</style>

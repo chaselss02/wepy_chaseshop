@@ -1,78 +1,77 @@
-<template>
-  <view>
-    <Stair data-source="{{}}"></Stair>
-    <StairLeft data-source="{{items}}"></StairLeft>
-    <StairRight data-source="{{items}}"></StairRight>
-  </view>
+<template class="container">
+  <Stair class="stair_container">
+    <view slot="lefts" class="lefts">
+      <StairLeft :source.sync="dataLabel"/>
+    </view>
+    <view slot="rights" class="rigths">
+      <StairRight :source.sync="dataProduct"/>
+    </view>
+  </Stair>
 </template>
 <script>
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
 import { GETPEODUCTLIST } from '../../store/types/home';
-import { asyncProList } from '../../store/actions/home.js';
+import { asyncDataLabel, asyncDataProduct } from '../../store/actions/home.js';
 
 import Stair from '../../components/home/stair';
 import StairLeft from '../../components/home/stairLeft';
 import StairRight from '../../components/home/stairRight';
+import panel from './panel';
 @connect(
   {
-    asyncProductList(state) {
-      return state.home.productList;
+    dataLabel(state) {
+      return state.home.dataLabel;
+    },
+    dataProduct(state) {
+      return state.home.dataProduct;
     }
   },
   {
-    asyncProList
+    asyncDataLabel,
+    asyncDataProduct
   }
 )
 export default class Home extends wepy.page {
-  data = {
-    items: [
-      {
-        id: '342',
-        // 导航名称
-        text: '所有城市',
-        // 禁用选项
-        disabled: false
-      },
-      {
-        id: '34我2',
-        // 导航名称
-        text: '家'
-      }
-    ]
-  };
+  data = {};
+  //usingComponents在config里面，父组件引用了以后子组件可用
   config = {
     usingComponents: {
-      'van-tree-select': '/components/vant/tree-select/index'
+      'van-icon': '/components/vant/icon/index'
     }
   };
-  methods = {
-    onClickNav({ detail = {} }) {
-      console.log(detail);
-      this.setData({
-        mainActiveIndex: detail.index || 0
-      });
-    },
-
-    onClickItem({ detail = {} }) {
-      console.log(detail);
-
-      this.setData({
-        activeId: detail.id
-      });
+  methods = {};
+  events = {
+    // 当StairLeft组件中点击了分类item触发此函数
+    onChangeNav(id) {
+      this.methods.asyncDataProduct(id); //获取分类下的商品列表
     }
   };
-
   components = {
-    Stair,
+    Stair, //好大一个坑啊，子组件的声明必须在父组件之前
     StairLeft,
     StairRight
   };
 
-  onShow() {
-    console.log(this.asyncProList, this.asyncProductList);
-    this.methods.asyncProList();
+  onLoad() {
+    this.methods.asyncDataLabel(); //获取分类列表
   }
 }
 </script>
+<style lang="less" scoped>
+.stair_container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  .lefts {
+    width: 30%;
+    height: 100%;
+  }
+  .rigths {
+    width: 70%;
+    height: 100%;
+    background-color: #fff;
+  }
+}
+</style>
 
